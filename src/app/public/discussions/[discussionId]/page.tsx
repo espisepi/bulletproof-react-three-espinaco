@@ -42,16 +42,17 @@ const preloadData = async (discussionId: string) => {
 };
 
 const PublicDiscussionPage = async ({
-  params: { discussionId },
+  params,
 }: {
-  params: {
+  params: Promise<{
     discussionId: string;
-  };
+  }>;
 }) => {
-  const { dehydratedState } = await preloadData(discussionId);
+  const resolvedParams = await params;
+  const { dehydratedState } = await preloadData(resolvedParams.discussionId);
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Discussion discussionId={discussionId} />
+      <Discussion discussionId={resolvedParams.discussionId} />
     </HydrationBoundary>
   );
 };

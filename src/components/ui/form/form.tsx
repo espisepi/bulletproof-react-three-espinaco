@@ -172,7 +172,7 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = 'FormMessage';
 
-type FormProps<TFormValues extends FieldValues, Schema> = {
+type FormProps<TFormValues extends FieldValues, Schema extends ZodType> = {
   onSubmit: SubmitHandler<TFormValues>;
   schema: Schema;
   className?: string;
@@ -192,7 +192,7 @@ const Form = <
   id,
   schema,
 }: FormProps<TFormValues, Schema>) => {
-  const form = useForm({ ...options, resolver: zodResolver(schema) });
+  const form = useForm({ ...options, resolver: zodResolver(schema) as any });
   return (
     <FormProvider {...form}>
       <form

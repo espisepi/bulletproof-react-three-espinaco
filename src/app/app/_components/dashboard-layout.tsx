@@ -22,7 +22,7 @@ import { cn } from '@/utils/cn';
 type SideNavigationItem = {
   name: string;
   to: string;
-  icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+  icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element;
 };
 
 const Logo = () => {
