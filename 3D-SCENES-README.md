@@ -26,6 +26,13 @@ Este proyecto ahora incluye páginas con escenas 3D interactivas utilizando Thre
    - Iluminación avanzada con múltiples fuentes
    - Optimizaciones de rendimiento
 
+4. **Custom Shaders** (`/scene3d-shaders`)
+   - Animaciones en Vertex Shader (ondas, morfing)
+   - Efectos en Fragment Shader (pulsing, energía)
+   - Shaders personalizados con GLSL
+   - Interfaz para cambiar entre diferentes shaders
+   - Demostración de técnicas avanzadas de WebGL
+
 ## 🛠️ Tecnologías Utilizadas
 
 - **Three.js**: Biblioteca principal para gráficos 3D

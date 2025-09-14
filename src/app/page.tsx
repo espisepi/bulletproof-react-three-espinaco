@@ -151,6 +151,30 @@ const HomePage = async () => {
                 Escena 3D Super Avanzada
               </Button>
             </Link>
+            <Link href="/scene3d-shaders">
+              <Button
+                variant="outline"
+                className="bg-gradient-to-r from-green-500 to-teal-500 text-white border-0 hover:from-green-600 hover:to-teal-600"
+                icon={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="size-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"
+                    />
+                  </svg>
+                }
+              >
+                Custom Shaders
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
