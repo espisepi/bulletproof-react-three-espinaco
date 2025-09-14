@@ -8,6 +8,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { MainErrorFallback } from '@/components/errors/main';
 import { Notifications } from '@/components/ui/notifications';
 import { queryConfig } from '@/lib/react-query';
+import { BackgroundCanvasWrapper } from '@/features/three-espinaco/components/BackgroundCanvas';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -26,7 +27,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <QueryClientProvider client={queryClient}>
         {process.env.DEV && <ReactQueryDevtools />}
         <Notifications />
-        {children}
+        <BackgroundCanvasWrapper>
+          {children}
+        </BackgroundCanvasWrapper>
       </QueryClientProvider>
     </ErrorBoundary>
   );
