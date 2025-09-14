@@ -5,8 +5,8 @@
 /* eslint-disable tailwindcss/no-contradicting-classname */
 'use client';
 
-import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Suspense, useRef } from 'react';
 import {
   OrbitControls,
   Environment,
@@ -14,8 +14,6 @@ import {
   Sphere,
   Torus,
 } from '@react-three/drei';
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 
 // Rotating Box Component

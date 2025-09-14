@@ -16,18 +16,22 @@ extend({ ShaderMaterial });
 
 // Custom Shader Material Props
 interface CustomShaderProps {
-    position?: [number, number, number];
-    scale?: number;
-    speed?: number;
-    color?: string;
+  position?: [number, number, number];
+  scale?: number;
+  speed?: number;
+  color?: string;
 }
 
 // 1. WAVE ANIMATION SHADER - Vertex Shader Animation
-function WaveAnimatedPlane({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShaderProps) {
-    const meshRef = useRef<Mesh>(null);
-    const materialRef = useRef<ShaderMaterial>(null);
+function WaveAnimatedPlane({
+  position = [0, 0, 0],
+  scale = 1,
+  speed = 1,
+}: CustomShaderProps) {
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
 
-    const vertexShader = `
+  const vertexShader = `
     uniform float uTime;
     uniform float uSpeed;
     uniform float uAmplitude;
@@ -55,7 +59,7 @@ function WaveAnimatedPlane({ position = [0, 0, 0], scale = 1, speed = 1 }: Custo
     }
   `;
 
-    const fragmentShader = `
+  const fragmentShader = `
     uniform float uTime;
     uniform vec3 uColor;
     
@@ -80,40 +84,47 @@ function WaveAnimatedPlane({ position = [0, 0, 0], scale = 1, speed = 1 }: Custo
     }
   `;
 
-    const uniforms = useMemo(() => ({
-        uTime: { value: 0 },
-        uSpeed: { value: speed },
-        uAmplitude: { value: 0.5 },
-        uFrequency: { value: 2.0 },
-        uColor: { value: new Color(0.2, 0.6, 1.0) }
-    }), [speed]);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uSpeed: { value: speed },
+      uAmplitude: { value: 0.5 },
+      uFrequency: { value: 2.0 },
+      uColor: { value: new Color(0.2, 0.6, 1.0) },
+    }),
+    [speed],
+  );
 
-    useFrame((state) => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-        }
-    });
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
+  });
 
-    return (
-        <mesh ref={meshRef} position={position} scale={scale}>
-            <planeGeometry args={[4, 4, 64, 64]} />
-            <shaderMaterial
-                ref={materialRef}
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-                wireframe={false}
-            />
-        </mesh>
-    );
+  return (
+    <mesh ref={meshRef} position={position} scale={scale}>
+      <planeGeometry args={[4, 4, 64, 64]} />
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+        wireframe={false}
+      />
+    </mesh>
+  );
 }
 
 // 2. PULSING SPHERE SHADER - Fragment Shader Animation
-function PulsingSphere({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShaderProps) {
-    const meshRef = useRef<Mesh>(null);
-    const materialRef = useRef<ShaderMaterial>(null);
+function PulsingSphere({
+  position = [0, 0, 0],
+  scale = 1,
+  speed = 1,
+}: CustomShaderProps) {
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
 
-    const vertexShader = `
+  const vertexShader = `
     varying vec3 vNormal;
     varying vec3 vPosition;
     
@@ -125,7 +136,7 @@ function PulsingSphere({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomSha
     }
   `;
 
-    const fragmentShader = `
+  const fragmentShader = `
     uniform float uTime;
     uniform float uSpeed;
     uniform vec3 uColor1;
@@ -163,39 +174,46 @@ function PulsingSphere({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomSha
     }
   `;
 
-    const uniforms = useMemo(() => ({
-        uTime: { value: 0 },
-        uSpeed: { value: speed },
-        uColor1: { value: new Color(1.0, 0.2, 0.4) },
-        uColor2: { value: new Color(0.2, 0.8, 1.0) },
-        uColor3: { value: new Color(0.8, 0.2, 1.0) }
-    }), [speed]);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uSpeed: { value: speed },
+      uColor1: { value: new Color(1.0, 0.2, 0.4) },
+      uColor2: { value: new Color(0.2, 0.8, 1.0) },
+      uColor3: { value: new Color(0.8, 0.2, 1.0) },
+    }),
+    [speed],
+  );
 
-    useFrame((state) => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-        }
-    });
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
+  });
 
-    return (
-        <mesh ref={meshRef} position={position} scale={scale}>
-            <sphereGeometry args={[1, 32, 32]} />
-            <shaderMaterial
-                ref={materialRef}
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-            />
-        </mesh>
-    );
+  return (
+    <mesh ref={meshRef} position={position} scale={scale}>
+      <sphereGeometry args={[1, 32, 32]} />
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+      />
+    </mesh>
+  );
 }
 
 // 3. MORPHING CUBE SHADER - Complex Vertex Animation
-function MorphingCube({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShaderProps) {
-    const meshRef = useRef<Mesh>(null);
-    const materialRef = useRef<ShaderMaterial>(null);
+function MorphingCube({
+  position = [0, 0, 0],
+  scale = 1,
+  speed = 1,
+}: CustomShaderProps) {
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
 
-    const vertexShader = `
+  const vertexShader = `
     uniform float uTime;
     uniform float uSpeed;
     uniform float uMorphFactor;
@@ -231,7 +249,7 @@ function MorphingCube({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShad
     }
   `;
 
-    const fragmentShader = `
+  const fragmentShader = `
     uniform float uTime;
     uniform float uSpeed;
     uniform vec3 uBaseColor;
@@ -263,38 +281,45 @@ function MorphingCube({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShad
     }
   `;
 
-    const uniforms = useMemo(() => ({
-        uTime: { value: 0 },
-        uSpeed: { value: speed },
-        uMorphFactor: { value: 0.3 },
-        uBaseColor: { value: new Color(0.4, 0.2, 0.8) }
-    }), [speed]);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uSpeed: { value: speed },
+      uMorphFactor: { value: 0.3 },
+      uBaseColor: { value: new Color(0.4, 0.2, 0.8) },
+    }),
+    [speed],
+  );
 
-    useFrame((state) => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-        }
-    });
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
+  });
 
-    return (
-        <mesh ref={meshRef} position={position} scale={scale}>
-            <boxGeometry args={[1.5, 1.5, 1.5, 16, 16, 16]} />
-            <shaderMaterial
-                ref={materialRef}
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-            />
-        </mesh>
-    );
+  return (
+    <mesh ref={meshRef} position={position} scale={scale}>
+      <boxGeometry args={[1.5, 1.5, 1.5, 16, 16, 16]} />
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+      />
+    </mesh>
+  );
 }
 
 // 4. ENERGY FIELD SHADER - Advanced Fragment Effects
-function EnergyField({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShaderProps) {
-    const meshRef = useRef<Mesh>(null);
-    const materialRef = useRef<ShaderMaterial>(null);
+function EnergyField({
+  position = [0, 0, 0],
+  scale = 1,
+  speed = 1,
+}: CustomShaderProps) {
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
 
-    const vertexShader = `
+  const vertexShader = `
     uniform float uTime;
     uniform float uSpeed;
     
@@ -315,7 +340,7 @@ function EnergyField({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShade
     }
   `;
 
-    const fragmentShader = `
+  const fragmentShader = `
     uniform float uTime;
     uniform float uSpeed;
     uniform vec3 uColor1;
@@ -360,77 +385,80 @@ function EnergyField({ position = [0, 0, 0], scale = 1, speed = 1 }: CustomShade
     }
   `;
 
-    const uniforms = useMemo(() => ({
-        uTime: { value: 0 },
-        uSpeed: { value: speed },
-        uColor1: { value: new Color(0.0, 0.5, 1.0) },
-        uColor2: { value: new Color(1.0, 0.0, 0.5) }
-    }), [speed]);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uSpeed: { value: speed },
+      uColor1: { value: new Color(0.0, 0.5, 1.0) },
+      uColor2: { value: new Color(1.0, 0.0, 0.5) },
+    }),
+    [speed],
+  );
 
-    useFrame((state) => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-        }
-    });
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
+  });
 
-    return (
-        <mesh ref={meshRef} position={position} scale={scale}>
-            <planeGeometry args={[3, 3, 32, 32]} />
-            <shaderMaterial
-                ref={materialRef}
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-                transparent={true}
-                side={THREE.DoubleSide}
-            />
-        </mesh>
-    );
+  return (
+    <mesh ref={meshRef} position={position} scale={scale}>
+      <planeGeometry args={[3, 3, 32, 32]} />
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+        transparent={true}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
 }
 
 // 5. FIRE PARTICLE SYSTEM - Realistic Fire Simulation
 function FireParticleSystem({
-    position = [0, 0, 0],
-    scale = 1,
-    speed = 1,
-    fireIntensity = 1.2,
-    windStrength = 0.3
+  position = [0, 0, 0],
+  scale = 1,
+  speed = 1,
+  fireIntensity = 1.2,
+  windStrength = 0.3,
 }: CustomShaderProps & { fireIntensity?: number; windStrength?: number }) {
-    const meshRef = useRef<Mesh>(null);
-    const materialRef = useRef<ShaderMaterial>(null);
-    const particleCount = 1000;
+  const meshRef = useRef<Mesh>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
+  const particleCount = 1000;
 
-    // Generate particle positions and attributes
-    const particlePositions = useMemo(() => {
-        const positions = new Float32Array(particleCount * 3);
-        const velocities = new Float32Array(particleCount * 3);
-        const sizes = new Float32Array(particleCount);
-        const lifetimes = new Float32Array(particleCount);
+  // Generate particle positions and attributes
+  const particlePositions = useMemo(() => {
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const lifetimes = new Float32Array(particleCount);
 
-        for (let i = 0; i < particleCount; i++) {
-            const i3 = i * 3;
+    for (let i = 0; i < particleCount; i++) {
+      const i3 = i * 3;
 
-            // Random position at base of fire
-            positions[i3] = (Math.random() - 0.5) * 2.0; // x
-            positions[i3 + 1] = 0.0; // y (start at bottom)
-            positions[i3 + 2] = (Math.random() - 0.5) * 2.0; // z
+      // Random position at base of fire
+      positions[i3] = (Math.random() - 0.5) * 2.0; // x
+      positions[i3 + 1] = 0.0; // y (start at bottom)
+      positions[i3 + 2] = (Math.random() - 0.5) * 2.0; // z
 
-            // Random velocity (upward with some randomness)
-            velocities[i3] = (Math.random() - 0.5) * 0.5; // x
-            velocities[i3 + 1] = Math.random() * 2.0 + 1.0; // y (upward)
-            velocities[i3 + 2] = (Math.random() - 0.5) * 0.5; // z
+      // Random velocity (upward with some randomness)
+      velocities[i3] = (Math.random() - 0.5) * 0.5; // x
+      velocities[i3 + 1] = Math.random() * 2.0 + 1.0; // y (upward)
+      velocities[i3 + 2] = (Math.random() - 0.5) * 0.5; // z
 
-            // Random size
-            sizes[i] = Math.random() * 0.3 + 0.1;
+      // Random size
+      sizes[i] = Math.random() * 0.3 + 0.1;
 
-            // Random lifetime offset
-            lifetimes[i] = Math.random() * 10.0;
-        }
+      // Random lifetime offset
+      lifetimes[i] = Math.random() * 10.0;
+    }
 
-        return { positions, velocities, sizes, lifetimes };
-    }, []);
+    return { positions, velocities, sizes, lifetimes };
+  }, []);
 
-    const vertexShader = `
+  const vertexShader = `
     uniform float uTime;
     uniform float uSpeed;
     uniform float uWindStrength;
@@ -497,7 +525,7 @@ function FireParticleSystem({
     }
   `;
 
-    const fragmentShader = `
+  const fragmentShader = `
     uniform float uTime;
     uniform float uSpeed;
     
@@ -532,319 +560,378 @@ function FireParticleSystem({
     }
   `;
 
-    const uniforms = useMemo(() => ({
-        uTime: { value: 0 },
-        uSpeed: { value: speed },
-        uWindStrength: { value: windStrength },
-        uFireIntensity: { value: fireIntensity }
-    }), [speed, windStrength, fireIntensity]);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uSpeed: { value: speed },
+      uWindStrength: { value: windStrength },
+      uFireIntensity: { value: fireIntensity },
+    }),
+    [speed, windStrength, fireIntensity],
+  );
 
-    useFrame((state) => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-        }
-    });
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    }
+  });
 
-    return (
-        <points ref={meshRef} position={position} scale={scale}>
-            <bufferGeometry>
-                <bufferAttribute
-                    attach="attributes-position"
-                    count={particleCount}
-                    array={particlePositions.positions}
-                    itemSize={3}
-                />
-                <bufferAttribute
-                    attach="attributes-aSize"
-                    count={particleCount}
-                    array={particlePositions.sizes}
-                    itemSize={1}
-                />
-                <bufferAttribute
-                    attach="attributes-aLifetime"
-                    count={particleCount}
-                    array={particlePositions.lifetimes}
-                    itemSize={1}
-                />
-                <bufferAttribute
-                    attach="attributes-aVelocity"
-                    count={particleCount}
-                    array={particlePositions.velocities}
-                    itemSize={3}
-                />
-            </bufferGeometry>
-            <shaderMaterial
-                ref={materialRef}
-                vertexShader={vertexShader}
-                fragmentShader={fragmentShader}
-                uniforms={uniforms}
-                transparent={true}
-                depthWrite={false}
-                blending={THREE.AdditiveBlending}
-            />
-        </points>
-    );
+  return (
+    <points ref={meshRef} position={position} scale={scale}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={particleCount}
+          array={particlePositions.positions}
+          itemSize={3}
+          args={[particlePositions.positions, 3]}
+        />
+        <bufferAttribute
+          attach="attributes-aSize"
+          count={particleCount}
+          array={particlePositions.sizes}
+          itemSize={1}
+          args={[particlePositions.sizes, 1]}
+        />
+        <bufferAttribute
+          attach="attributes-aLifetime"
+          count={particleCount}
+          array={particlePositions.lifetimes}
+          itemSize={1}
+          args={[particlePositions.lifetimes, 1]}
+        />
+        <bufferAttribute
+          attach="attributes-aVelocity"
+          count={particleCount}
+          array={particlePositions.velocities}
+          itemSize={3}
+          args={[particlePositions.velocities, 3]}
+        />
+      </bufferGeometry>
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+        transparent={true}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
 }
 
 // Main Scene Component
 function ShaderScene() {
-    const [activeShader, setActiveShader] = useState<'wave' | 'sphere' | 'cube' | 'energy' | 'fire'>('wave');
-    const [fireIntensity, setFireIntensity] = useState(1.2);
-    const [windStrength, setWindStrength] = useState(0.3);
+  const [activeShader, setActiveShader] = useState<
+    'wave' | 'sphere' | 'cube' | 'energy' | 'fire'
+  >('wave');
+  const [fireIntensity, setFireIntensity] = useState(1.2);
+  const [windStrength, setWindStrength] = useState(0.3);
 
-    return (
-        <>
-            {/* Lighting */}
-            <ambientLight intensity={0.3} />
-            <directionalLight position={[5, 5, 5]} intensity={1} />
-            <pointLight position={[-5, -5, -5]} intensity={0.5} color="#ff6b6b" />
-            <pointLight position={[5, -5, 5]} intensity={0.5} color="#4ecdc4" />
+  return (
+    <>
+      {/* Lighting */}
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[5, 5, 5]} intensity={1} />
+      <pointLight position={[-5, -5, -5]} intensity={0.5} color="#ff6b6b" />
+      <pointLight position={[5, -5, 5]} intensity={0.5} color="#4ecdc4" />
 
-            {/* Shader Objects */}
-            {activeShader === 'wave' && <WaveAnimatedPlane position={[0, 0, 0]} speed={2} />}
-            {activeShader === 'sphere' && <PulsingSphere position={[0, 0, 0]} speed={1.5} />}
-            {activeShader === 'cube' && <MorphingCube position={[0, 0, 0]} speed={1} />}
-            {activeShader === 'energy' && <EnergyField position={[0, 0, 0]} speed={2.5} />}
-            {activeShader === 'fire' && <FireParticleSystem position={[0, -1, 0]} speed={1} fireIntensity={fireIntensity} windStrength={windStrength} />}
+      {/* Shader Objects */}
+      {activeShader === 'wave' && (
+        <WaveAnimatedPlane position={[0, 0, 0]} speed={2} />
+      )}
+      {activeShader === 'sphere' && (
+        <PulsingSphere position={[0, 0, 0]} speed={1.5} />
+      )}
+      {activeShader === 'cube' && (
+        <MorphingCube position={[0, 0, 0]} speed={1} />
+      )}
+      {activeShader === 'energy' && (
+        <EnergyField position={[0, 0, 0]} speed={2.5} />
+      )}
+      {activeShader === 'fire' && (
+        <FireParticleSystem
+          position={[0, -1, 0]}
+          speed={1}
+          fireIntensity={fireIntensity}
+          windStrength={windStrength}
+        />
+      )}
 
-            {/* Ground plane */}
-            <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                <planeGeometry args={[20, 20]} />
-                <meshStandardMaterial color="#1a1a2e" transparent opacity={0.3} />
-            </mesh>
+      {/* Ground plane */}
+      <mesh position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[20, 20]} />
+        <meshStandardMaterial color="#1a1a2e" transparent opacity={0.3} />
+      </mesh>
 
-            {/* Fire base (when fire is active) */}
-            {activeShader === 'fire' && (
-                <mesh position={[0, -1.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                    <circleGeometry args={[1.5, 16]} />
-                    <meshStandardMaterial color="#2a1a0a" emissive="#4a2a1a" emissiveIntensity={0.3} />
-                </mesh>
-            )}
+      {/* Fire base (when fire is active) */}
+      {activeShader === 'fire' && (
+        <mesh position={[0, -1.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[1.5, 16]} />
+          <meshStandardMaterial
+            color="#2a1a0a"
+            emissive="#4a2a1a"
+            emissiveIntensity={0.3}
+          />
+        </mesh>
+      )}
 
-            {/* Interactive Controls */}
-            <Html position={[0, -1, 0]}>
-                <div className="bg-black/70 text-white p-4 rounded-lg max-w-md">
-                    <h3 className="text-lg font-semibold mb-3">Custom Shaders</h3>
-                    <div className="grid grid-cols-2 gap-2 mb-4">
-                        <button
-                            onClick={() => setActiveShader('wave')}
-                            className={`px-3 py-2 rounded text-sm ${activeShader === 'wave' ? 'bg-blue-500' : 'bg-gray-600 hover:bg-gray-500'
-                                }`}
-                        >
-                            Wave Plane
-                        </button>
-                        <button
-                            onClick={() => setActiveShader('sphere')}
-                            className={`px-3 py-2 rounded text-sm ${activeShader === 'sphere' ? 'bg-blue-500' : 'bg-gray-600 hover:bg-gray-500'
-                                }`}
-                        >
-                            Pulsing Sphere
-                        </button>
-                        <button
-                            onClick={() => setActiveShader('cube')}
-                            className={`px-3 py-2 rounded text-sm ${activeShader === 'cube' ? 'bg-blue-500' : 'bg-gray-600 hover:bg-gray-500'
-                                }`}
-                        >
-                            Morphing Cube
-                        </button>
-                        <button
-                            onClick={() => setActiveShader('energy')}
-                            className={`px-3 py-2 rounded text-sm ${activeShader === 'energy' ? 'bg-blue-500' : 'bg-gray-600 hover:bg-gray-500'
-                                }`}
-                        >
-                            Energy Field
-                        </button>
-                        <button
-                            onClick={() => setActiveShader('fire')}
-                            className={`px-3 py-2 rounded text-sm col-span-2 ${activeShader === 'fire' ? 'bg-red-500' : 'bg-gray-600 hover:bg-gray-500'
-                                }`}
-                        >
-                            🔥 Fire Particles
-                        </button>
-                    </div>
+      {/* Interactive Controls */}
+      <Html position={[0, -1, 0]}>
+        <div className="bg-black/70 text-white p-4 rounded-lg max-w-md">
+          <h3 className="text-lg font-semibold mb-3">Custom Shaders</h3>
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            <button
+              onClick={() => setActiveShader('wave')}
+              className={`px-3 py-2 rounded text-sm ${
+                activeShader === 'wave'
+                  ? 'bg-blue-500'
+                  : 'bg-gray-600 hover:bg-gray-500'
+              }`}
+            >
+              Wave Plane
+            </button>
+            <button
+              onClick={() => setActiveShader('sphere')}
+              className={`px-3 py-2 rounded text-sm ${
+                activeShader === 'sphere'
+                  ? 'bg-blue-500'
+                  : 'bg-gray-600 hover:bg-gray-500'
+              }`}
+            >
+              Pulsing Sphere
+            </button>
+            <button
+              onClick={() => setActiveShader('cube')}
+              className={`px-3 py-2 rounded text-sm ${
+                activeShader === 'cube'
+                  ? 'bg-blue-500'
+                  : 'bg-gray-600 hover:bg-gray-500'
+              }`}
+            >
+              Morphing Cube
+            </button>
+            <button
+              onClick={() => setActiveShader('energy')}
+              className={`px-3 py-2 rounded text-sm ${
+                activeShader === 'energy'
+                  ? 'bg-blue-500'
+                  : 'bg-gray-600 hover:bg-gray-500'
+              }`}
+            >
+              Energy Field
+            </button>
+            <button
+              onClick={() => setActiveShader('fire')}
+              className={`px-3 py-2 rounded text-sm col-span-2 ${
+                activeShader === 'fire'
+                  ? 'bg-red-500'
+                  : 'bg-gray-600 hover:bg-gray-500'
+              }`}
+            >
+              🔥 Fire Particles
+            </button>
+          </div>
 
-                    {/* Fire Controls */}
-                    {activeShader === 'fire' && (
-                        <div className="space-y-3 border-t border-gray-600 pt-3">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Fire Intensity</label>
-                                <input
-                                    type="range"
-                                    min="0.5"
-                                    max="2.0"
-                                    step="0.1"
-                                    value={fireIntensity}
-                                    onChange={(e) => setFireIntensity(parseFloat(e.target.value))}
-                                    className="w-full"
-                                />
-                                <span className="text-xs text-gray-400">{fireIntensity.toFixed(1)}</span>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Wind Strength</label>
-                                <input
-                                    type="range"
-                                    min="0.0"
-                                    max="1.0"
-                                    step="0.1"
-                                    value={windStrength}
-                                    onChange={(e) => setWindStrength(parseFloat(e.target.value))}
-                                    className="w-full"
-                                />
-                                <span className="text-xs text-gray-400">{windStrength.toFixed(1)}</span>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </Html>
-        </>
-    );
+          {/* Fire Controls */}
+          {activeShader === 'fire' && (
+            <div className="space-y-3 border-t border-gray-600 pt-3">
+              <div>
+                <label
+                  htmlFor="fire-intensity"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Fire Intensity
+                </label>
+                <input
+                  id="fire-intensity"
+                  type="range"
+                  min="0.5"
+                  max="2.0"
+                  step="0.1"
+                  value={fireIntensity}
+                  onChange={(e) => setFireIntensity(parseFloat(e.target.value))}
+                  className="w-full"
+                />
+                <span className="text-xs text-gray-400">
+                  {fireIntensity.toFixed(1)}
+                </span>
+              </div>
+              <div>
+                <label
+                  htmlFor="wind-strength"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Wind Strength
+                </label>
+                <input
+                  id="wind-strength"
+                  type="range"
+                  min="0.0"
+                  max="1.0"
+                  step="0.1"
+                  value={windStrength}
+                  onChange={(e) => setWindStrength(parseFloat(e.target.value))}
+                  className="w-full"
+                />
+                <span className="text-xs text-gray-400">
+                  {windStrength.toFixed(1)}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </Html>
+    </>
+  );
 }
 
 // Loading Component
 function Loading() {
-    return (
-        <Html center>
-            <div className="text-white text-xl bg-black/50 px-4 py-2 rounded-lg">
-                Cargando shaders personalizados...
-            </div>
-        </Html>
-    );
+  return (
+    <Html center>
+      <div className="text-white text-xl bg-black/50 px-4 py-2 rounded-lg">
+        Cargando shaders personalizados...
+      </div>
+    </Html>
+  );
 }
 
 export default function ShaderScenePage() {
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-            <div className="container mx-auto px-4 py-8">
-                <div className="text-center mb-8">
-                    <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                        Custom Shaders
-                    </h1>
-                    <p className="text-gray-300 text-xl">
-                        Animaciones avanzadas con Vertex y Fragment Shaders
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
-                        <h2 className="text-xl font-semibold text-white mb-4">
-                            🌊 Wave Plane
-                        </h2>
-                        <ul className="text-gray-300 space-y-2 text-sm">
-                            <li>• Animación en vertex shader</li>
-                            <li>• Ondas sinusoidales</li>
-                            <li>• Colores dinámicos</li>
-                            <li>• Patrones animados</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
-                        <h2 className="text-xl font-semibold text-white mb-4">
-                            🔮 Pulsing Sphere
-                        </h2>
-                        <ul className="text-gray-300 space-y-2 text-sm">
-                            <li>• Efectos de fragment shader</li>
-                            <li>• Iluminación rim</li>
-                            <li>• Gradientes dinámicos</li>
-                            <li>• Ruido animado</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
-                        <h2 className="text-xl font-semibold text-white mb-4">
-                            📦 Morphing Cube
-                        </h2>
-                        <ul className="text-gray-300 space-y-2 text-sm">
-                            <li>• Morfing geométrico</li>
-                            <li>• Distorsión de vértices</li>
-                            <li>• Rayas animadas</li>
-                            <li>• Iluminación normal</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
-                        <h2 className="text-xl font-semibold text-white mb-4">
-                            ⚡ Energy Field
-                        </h2>
-                        <ul className="text-gray-300 space-y-2 text-sm">
-                            <li>• Campo de energía</li>
-                            <li>• Función de ruido</li>
-                            <li>• Efectos de brillo</li>
-                            <li>• Transparencia</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
-                        <h2 className="text-xl font-semibold text-white mb-4">
-                            🔥 Fire Particles
-                        </h2>
-                        <ul className="text-gray-300 space-y-2 text-sm">
-                            <li>• Sistema de partículas</li>
-                            <li>• Simulación de fuego</li>
-                            <li>• Efectos de viento</li>
-                            <li>• Controles interactivos</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div className="relative h-[700px] w-full bg-gray-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-600/30 shadow-2xl">
-                    <Canvas
-                        camera={{ position: [0, 2, 8], fov: 75 }}
-                        style={{ width: '100%', height: '100%' }}
-                        gl={{ antialias: true, alpha: true }}
-                    >
-                        <Suspense fallback={<Loading />}>
-                            <Environment preset="night" />
-                            <ShaderScene />
-                            <OrbitControls
-                                enableZoom={true}
-                                enablePan={true}
-                                enableRotate={true}
-                                autoRotate={false}
-                                minDistance={3}
-                                maxDistance={15}
-                                enableDamping={true}
-                                dampingFactor={0.05}
-                            />
-                        </Suspense>
-                    </Canvas>
-                </div>
-
-                <div className="mt-8 bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
-                    <h2 className="text-2xl font-semibold text-white mb-6">
-                        🎨 Conceptos de Shaders
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg p-4 border border-blue-500/30">
-                            <h3 className="text-lg font-medium text-blue-400 mb-2">
-                                Vertex Shader
-                            </h3>
-                            <p className="text-gray-300 text-sm mb-2">
-                                Procesa cada vértice de la geometría. Se usa para:
-                            </p>
-                            <ul className="text-gray-300 text-sm space-y-1">
-                                <li>• Transformar posiciones de vértices</li>
-                                <li>• Crear animaciones geométricas</li>
-                                <li>• Modificar la forma de objetos</li>
-                                <li>• Calcular normales y coordenadas UV</li>
-                            </ul>
-                        </div>
-                        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg p-4 border border-purple-500/30">
-                            <h3 className="text-lg font-medium text-purple-400 mb-2">
-                                Fragment Shader
-                            </h3>
-                            <p className="text-gray-300 text-sm mb-2">
-                                Procesa cada píxel de la superficie. Se usa para:
-                            </p>
-                            <ul className="text-gray-300 text-sm space-y-1">
-                                <li>• Determinar el color de cada píxel</li>
-                                <li>• Crear efectos visuales</li>
-                                <li>• Aplicar texturas y materiales</li>
-                                <li>• Simular iluminación y sombras</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            Custom Shaders
+          </h1>
+          <p className="text-gray-300 text-xl">
+            Animaciones avanzadas con Vertex y Fragment Shaders
+          </p>
         </div>
-    );
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              🌊 Wave Plane
+            </h2>
+            <ul className="text-gray-300 space-y-2 text-sm">
+              <li>• Animación en vertex shader</li>
+              <li>• Ondas sinusoidales</li>
+              <li>• Colores dinámicos</li>
+              <li>• Patrones animados</li>
+            </ul>
+          </div>
+
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              🔮 Pulsing Sphere
+            </h2>
+            <ul className="text-gray-300 space-y-2 text-sm">
+              <li>• Efectos de fragment shader</li>
+              <li>• Iluminación rim</li>
+              <li>• Gradientes dinámicos</li>
+              <li>• Ruido animado</li>
+            </ul>
+          </div>
+
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              📦 Morphing Cube
+            </h2>
+            <ul className="text-gray-300 space-y-2 text-sm">
+              <li>• Morfing geométrico</li>
+              <li>• Distorsión de vértices</li>
+              <li>• Rayas animadas</li>
+              <li>• Iluminación normal</li>
+            </ul>
+          </div>
+
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              ⚡ Energy Field
+            </h2>
+            <ul className="text-gray-300 space-y-2 text-sm">
+              <li>• Campo de energía</li>
+              <li>• Función de ruido</li>
+              <li>• Efectos de brillo</li>
+              <li>• Transparencia</li>
+            </ul>
+          </div>
+
+          <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              🔥 Fire Particles
+            </h2>
+            <ul className="text-gray-300 space-y-2 text-sm">
+              <li>• Sistema de partículas</li>
+              <li>• Simulación de fuego</li>
+              <li>• Efectos de viento</li>
+              <li>• Controles interactivos</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="relative h-[700px] w-full bg-gray-900/20 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-600/30 shadow-2xl">
+          <Canvas
+            camera={{ position: [0, 2, 8], fov: 75 }}
+            style={{ width: '100%', height: '100%' }}
+            gl={{ antialias: true, alpha: true }}
+          >
+            <Suspense fallback={<Loading />}>
+              <Environment preset="night" />
+              <ShaderScene />
+              <OrbitControls
+                enableZoom={true}
+                enablePan={true}
+                enableRotate={true}
+                autoRotate={false}
+                minDistance={3}
+                maxDistance={15}
+                enableDamping={true}
+                dampingFactor={0.05}
+              />
+            </Suspense>
+          </Canvas>
+        </div>
+
+        <div className="mt-8 bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-600/50">
+          <h2 className="text-2xl font-semibold text-white mb-6">
+            🎨 Conceptos de Shaders
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg p-4 border border-blue-500/30">
+              <h3 className="text-lg font-medium text-blue-400 mb-2">
+                Vertex Shader
+              </h3>
+              <p className="text-gray-300 text-sm mb-2">
+                Procesa cada vértice de la geometría. Se usa para:
+              </p>
+              <ul className="text-gray-300 text-sm space-y-1">
+                <li>• Transformar posiciones de vértices</li>
+                <li>• Crear animaciones geométricas</li>
+                <li>• Modificar la forma de objetos</li>
+                <li>• Calcular normales y coordenadas UV</li>
+              </ul>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg p-4 border border-purple-500/30">
+              <h3 className="text-lg font-medium text-purple-400 mb-2">
+                Fragment Shader
+              </h3>
+              <p className="text-gray-300 text-sm mb-2">
+                Procesa cada píxel de la superficie. Se usa para:
+              </p>
+              <ul className="text-gray-300 text-sm space-y-1">
+                <li>• Determinar el color de cada píxel</li>
+                <li>• Crear efectos visuales</li>
+                <li>• Aplicar texturas y materiales</li>
+                <li>• Simular iluminación y sombras</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

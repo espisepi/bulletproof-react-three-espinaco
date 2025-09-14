@@ -75,14 +75,14 @@ const HomePage = async () => {
 
         {/* 3D Scene Navigation */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+          <h3 className="mb-6 text-2xl font-bold text-gray-900">
             🎮 Escenas 3D con Three.js
           </h3>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Link href="/scene3d">
               <Button
                 variant="outline"
-                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 hover:from-blue-600 hover:to-purple-600"
+                className="border-0 bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600"
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@ const HomePage = async () => {
             <Link href="/scene3d-advanced">
               <Button
                 variant="outline"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600"
+                className="border-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@ const HomePage = async () => {
             <Link href="/scene3d-super-advanced">
               <Button
                 variant="outline"
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-0 hover:from-cyan-600 hover:to-blue-600"
+                className="border-0 bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-600 hover:to-blue-600"
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +154,7 @@ const HomePage = async () => {
             <Link href="/scene3d-shaders">
               <Button
                 variant="outline"
-                className="bg-gradient-to-r from-green-500 to-teal-500 text-white border-0 hover:from-green-600 hover:to-teal-600"
+                className="border-0 bg-gradient-to-r from-green-500 to-teal-500 text-white hover:from-green-600 hover:to-teal-600"
                 icon={
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
